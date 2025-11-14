@@ -44,7 +44,7 @@ Yes, you can adjust column numbers for desktop, tablet, and mobile views in the 
 
 == Developer Notes ==
 
-**Source Code:** https://github.com/williamvianas/book-grid
+**Source Code:** https://github.com/vianasw/book-grid
 **Build Instructions:**
 1. Clone the repository
 2. Run `npm install`
