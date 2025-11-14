@@ -21,7 +21,9 @@ const fetchCoverByTitle = async ( title ) => {
 		const res = await fetch(
 			`https://openlibrary.org/search.json?q=${ q }&limit=1`
 		);
-		if ( ! res.ok ) return null;
+		if ( ! res.ok ) {
+			return null;
+		}
 		const data = await res.json();
 		if ( data.docs && data.docs.length && data.docs[ 0 ].cover_i ) {
 			return `https://covers.openlibrary.org/b/id/${ data.docs[ 0 ].cover_i }-L.jpg`;
@@ -61,7 +63,9 @@ export default function Edit( { attributes, setAttributes } ) {
 
 	const handleAddBook = async () => {
 		const title = inputValue.trim();
-		if ( ! title ) return;
+		if ( ! title ) {
+			return;
+		}
 		setLoading( true );
 		const coverUrl = await fetchCoverByTitle( title );
 		setAttributes( {
@@ -89,16 +93,6 @@ export default function Edit( { attributes, setAttributes } ) {
 		setAttributes( { books: updates } );
 	};
 
-	const handleRemoveImage = ( idx ) => {
-		const updates = [ ...books ];
-		updates[ idx ] = {
-			...updates[ idx ],
-			uploadedId: null,
-			uploadedUrl: null,
-		};
-		setAttributes( { books: updates } );
-	};
-
 	const openDetails = ( idx ) => {
 		setDetailsIdx( idx );
 		setDetailsDraft( {
@@ -118,9 +112,37 @@ export default function Edit( { attributes, setAttributes } ) {
 		closeDetails();
 	};
 
+	const renderBookCover = ( book ) => {
+		if ( book.uploadedUrl ) {
+			return (
+				<img
+					src={ book.uploadedUrl }
+					alt={ book.title }
+					className="book-grid__cover"
+					loading="lazy"
+				/>
+			);
+		}
+		if ( book.coverUrl ) {
+			return (
+				<img
+					src={ book.coverUrl }
+					alt={ book.title }
+					className="book-grid__cover"
+					loading="lazy"
+				/>
+			);
+		}
+		return (
+			<div className="book-grid__cover--missing">
+				{ __( 'Not found', 'book-grid-block-wp' ) }
+			</div>
+		);
+	};
+
 	const blockProps = useBlockProps( {
 		style: {
-			backgroundColor: backgroundColor,
+			backgroundColor,
 			padding: 24,
 			borderRadius: 10,
 		},
@@ -254,28 +276,7 @@ export default function Edit( { attributes, setAttributes } ) {
 							style={ { margin: itemMargin / 2 } }
 						>
 							<div className="book-grid__item-imgwrap">
-								{ book.uploadedUrl ? (
-									<img
-										src={ book.uploadedUrl }
-										alt={ book.title }
-										className="book-grid__cover"
-										loading="lazy"
-									/>
-								) : book.coverUrl ? (
-									<img
-										src={ book.coverUrl }
-										alt={ book.title }
-										className="book-grid__cover"
-										loading="lazy"
-									/>
-								) : (
-									<div className="book-grid__cover--missing">
-										{ __(
-											'Not found',
-											'book-grid-block-wp'
-										) }
-									</div>
-								) }
+								{ renderBookCover( book ) }
 								{ book.caption && (
 									<div className="book-grid__overlay">
 										<span className="book-grid__caption">

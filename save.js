@@ -18,9 +18,34 @@ export default function save( { attributes } ) {
 		gridTemplateColumns: `repeat(${ columnsDesktop }, 1fr)`,
 	};
 	const blockStyle = {
-		backgroundColor: backgroundColor,
+		backgroundColor,
 		padding: 24,
 		borderRadius: 10,
+	};
+
+	// Helper function: render book cover image
+	const renderBookCover = ( book ) => {
+		if ( book.uploadedUrl ) {
+			return (
+				<img
+					src={ book.uploadedUrl }
+					alt={ book.title }
+					className="book-grid__cover"
+					loading="lazy"
+				/>
+			);
+		}
+		if ( book.coverUrl ) {
+			return (
+				<img
+					src={ book.coverUrl }
+					alt={ book.title }
+					className="book-grid__cover"
+					loading="lazy"
+				/>
+			);
+		}
+		return <div className="book-grid__cover--missing">Not found</div>;
 	};
 
 	// Helper function: wrap given children in a <a> if there is a link
@@ -51,25 +76,7 @@ export default function save( { attributes } ) {
 			>
 				{ books &&
 					books.map( ( book, i ) => {
-						const imgEl = book.uploadedUrl ? (
-							<img
-								src={ book.uploadedUrl }
-								alt={ book.title }
-								className="book-grid__cover"
-								loading="lazy"
-							/>
-						) : book.coverUrl ? (
-							<img
-								src={ book.coverUrl }
-								alt={ book.title }
-								className="book-grid__cover"
-								loading="lazy"
-							/>
-						) : (
-							<div className="book-grid__cover--missing">
-								Not found
-							</div>
-						);
+						const imgEl = renderBookCover( book );
 						const overlayEl = book.caption ? (
 							<div className="book-grid__overlay">
 								<span className="book-grid__caption">
