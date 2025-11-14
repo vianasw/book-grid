@@ -5,11 +5,12 @@ Tags:              block, books, grid, openlibrary, gallery
 Stable tag:        0.1.0
 License:           GPL-2.0-or-later
 Requires at least: 6.0
+Tested up to:      6.5
 Requires PHP:      7.2
-Text Domain:       book-grid-block-wp
+Text Domain:       book-grid
 Domain Path:       /languages
 
-A WordPress block for displaying a responsive, visually appealing grid of book covers, automatically fetched from OpenLibrary by book title, with customizable captions, columns, and layout settings.
+Display a responsive book cover grid that fetches OpenLibrary covers by title with customizable captions, columns, and layout controls.
 
 == Description ==
 

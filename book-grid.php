@@ -5,7 +5,7 @@
  * Version:           0.1.0
  * Author:            williamvianas
  * License:           GPL-2.0-or-later
- * Text Domain:       book-grid-block-wp
+ * Text Domain:       book-grid
  * Domain Path:       /languages
  *
  * @package BookGrid
@@ -26,7 +26,7 @@ function book_grid_block_init() {
 
 	// Register translations for the block.
 	if ( function_exists( 'wp_set_script_translations' ) ) {
-		wp_set_script_translations( 'w0-book-grid-editor-script', 'book-grid-block-wp', plugin_dir_path( __FILE__ ) . 'languages' );
+		wp_set_script_translations( 'w0-book-grid-editor-script', 'book-grid', plugin_dir_path( __FILE__ ) . 'languages' );
 	}
 }
 add_action( 'init', 'book_grid_block_init' );

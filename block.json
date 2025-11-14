@@ -49,7 +49,7 @@
 	"supports": {
 		"html": false
 	},
-	"textdomain": "book-grid-block-wp",
+	"textdomain": "book-grid",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
