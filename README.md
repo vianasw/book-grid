@@ -53,11 +53,29 @@ Beautiful book cover displays that adapt to any screen size.
 - WordPress 6.0+
 - PHP 7.2+
 
+### Project Structure
+
+```
+book-grid/
+├── src/              # Source files
+│   ├── edit.js       # Block editor component
+│   ├── save.js       # Block save function
+│   ├── index.js      # Block registration
+│   ├── view.js       # Frontend JavaScript
+│   ├── style.scss    # Frontend styles
+│   └── editor.scss   # Editor styles
+├── build/            # Compiled files (generated)
+├── languages/        # Translation files
+├── book-grid.php     # Main plugin file
+├── block.json        # Block metadata
+└── webpack.config.js # Build configuration
+```
+
 ### Setup
 
 ```bash
 # Clone the repository
-git clone https://github.com/williamvianas/book-grid.git
+git clone https://github.com/vianasw/book-grid.git
 cd book-grid
 
 # Install dependencies

@@ -50,7 +50,7 @@ Yes, you can adjust column numbers for desktop, tablet, and mobile views in the 
 2. Run `npm install`
 3. Run `npm run build` to compile assets
 
-This plugin uses @wordpress/scripts for building. All source files (edit.js, save.js, style.scss, etc.) are available in the GitHub repository.
+This plugin uses @wordpress/scripts for building. All source files are in the `src/` directory of the GitHub repository.
 
 == Arbitrary section ==
 
