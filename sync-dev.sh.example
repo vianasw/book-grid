@@ -1,0 +1,11 @@
+#!/bin/bash
+# Local development sync script
+# Copy this file to sync-dev.sh and update the path to your local WordPress installation
+
+rsync -av --delete \
+  --exclude 'node_modules' \
+  --exclude '.git' \
+  --exclude 'build' \
+  . '/path/to/your/wordpress/wp-content/plugins/book-grid/'
+
+echo "✅ Synced to local dev site"
