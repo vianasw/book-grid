@@ -1,5 +1,4 @@
-
-  {
+{
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "w0/book-grid",
@@ -9,43 +8,43 @@
 	"icon": "images-alt2",
 	"description": "Display a responsive, customizable grid of book covers fetched from OpenLibrary by title (or uploaded), with overlay captions, flexible layout, and fallback placeholders.",
 	"example": {
-	  "attributes": {
-	    "books": [
-	      { "title": "Pride and Prejudice" },
-	      { "title": "Moby Dick" }
-	    ],
-	    "columnsDesktop": 4,
-	    "columnsTablet": 2,
-	    "columnsMobile": 1,
-	    "itemMargin": 16,
-	    "backgroundColor": "#f7f7f7"
-	  }
-   	},
+		"attributes": {
+			"books": [
+				{ "title": "Pride and Prejudice" },
+				{ "title": "Moby Dick" }
+			],
+			"columnsDesktop": 4,
+			"columnsTablet": 2,
+			"columnsMobile": 1,
+			"itemMargin": 16,
+			"backgroundColor": "#f7f7f7"
+		}
+	},
 	"attributes": {
-	  "books": {
-	    "type": "array",
-	    "default": []
-	  },
-	  "columnsDesktop": {
-	    "type": "number",
-	    "default": 4
-	  },
-	  "columnsTablet": {
-	    "type": "number",
-	    "default": 2
-	  },
-	  "columnsMobile": {
-	    "type": "number",
-	    "default": 1
-	  },
-	  "itemMargin": {
-	    "type": "number",
-	    "default": 16
-	  },
-	  "backgroundColor": {
-	    "type": "string",
-	    "default": "#f7f7f7"
-	  }
+		"books": {
+			"type": "array",
+			"default": []
+		},
+		"columnsDesktop": {
+			"type": "number",
+			"default": 4
+		},
+		"columnsTablet": {
+			"type": "number",
+			"default": 2
+		},
+		"columnsMobile": {
+			"type": "number",
+			"default": 1
+		},
+		"itemMargin": {
+			"type": "number",
+			"default": 16
+		},
+		"backgroundColor": {
+			"type": "string",
+			"default": "#f7f7f7"
+		}
 	},
 	"supports": {
 		"html": false
@@ -55,6 +54,13 @@
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
 	"viewScript": "file:./view.js",
-	"editorLocale": ["es_ES", "fr_FR", "de_DE", "it_IT", "pt_BR", "ja", "ko_KR"]
-  }
-  
+	"editorLocale": [
+		"es_ES",
+		"fr_FR",
+		"de_DE",
+		"it_IT",
+		"pt_BR",
+		"ja",
+		"ko_KR"
+	]
+}

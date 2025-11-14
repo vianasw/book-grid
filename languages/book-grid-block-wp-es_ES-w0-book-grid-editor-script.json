@@ -1,80 +1,38 @@
 {
-  "translation-revision-date": "2024-11-14 00:00+0000",
-  "generator": "Manual",
-  "domain": "book-grid-block-wp",
-  "locale_data": {
-    "messages": {
-      "": {
-        "domain": "book-grid-block-wp",
-        "plural-forms": "nplurals=2; plural=(n != 1);",
-        "lang": "es_ES"
-      },
-      "Grid Settings": [
-        "Configuración de cuadrícula"
-      ],
-      "Columns (Desktop)": [
-        "Columnas (Escritorio)"
-      ],
-      "Columns (Tablet)": [
-        "Columnas (Tableta)"
-      ],
-      "Columns (Mobile)": [
-        "Columnas (Móvil)"
-      ],
-      "Item Margin (px)": [
-        "Margen de elementos (px)"
-      ],
-      "Background Color": [
-        "Color de fondo"
-      ],
-      "Add Book by Title": [
-        "Añadir libro por título"
-      ],
-      "Enter book title…": [
-        "Introduce el título del libro…"
-      ],
-      "Fetching…": [
-        "Obteniendo…"
-      ],
-      "Add Book": [
-        "Añadir libro"
-      ],
-      "No books added. Add book titles above to get started!": [
-        "No hay libros añadidos. ¡Añade títulos de libros arriba para comenzar!"
-      ],
-      "Not found": [
-        "No encontrado"
-      ],
-      "Remove book": [
-        "Eliminar libro"
-      ],
-      "Replace Cover": [
-        "Reemplazar portada"
-      ],
-      "Remove Upload": [
-        "Eliminar carga"
-      ],
-      "Details": [
-        "Detalles"
-      ],
-      "Book Details": [
-        "Detalles del libro"
-      ],
-      "Caption": [
-        "Leyenda"
-      ],
-      "Enter a caption…": [
-        "Introduce una leyenda…"
-      ],
-      "URL (optional link)": [
-        "URL (enlace opcional)"
-      ],
-      "Save": [
-        "Guardar"
-      ],
-      "Cancel": [
-        "Cancelar"
-      ]
-    }
-  }
+	"translation-revision-date": "2024-11-14 00:00+0000",
+	"generator": "Manual",
+	"domain": "book-grid-block-wp",
+	"locale_data": {
+		"messages": {
+			"": {
+				"domain": "book-grid-block-wp",
+				"plural-forms": "nplurals=2; plural=(n != 1);",
+				"lang": "es_ES"
+			},
+			"Grid Settings": [ "Configuración de cuadrícula" ],
+			"Columns (Desktop)": [ "Columnas (Escritorio)" ],
+			"Columns (Tablet)": [ "Columnas (Tableta)" ],
+			"Columns (Mobile)": [ "Columnas (Móvil)" ],
+			"Item Margin (px)": [ "Margen de elementos (px)" ],
+			"Background Color": [ "Color de fondo" ],
+			"Add Book by Title": [ "Añadir libro por título" ],
+			"Enter book title…": [ "Introduce el título del libro…" ],
+			"Fetching…": [ "Obteniendo…" ],
+			"Add Book": [ "Añadir libro" ],
+			"No books added. Add book titles above to get started!": [
+				"No hay libros añadidos. ¡Añade títulos de libros arriba para comenzar!"
+			],
+			"Not found": [ "No encontrado" ],
+			"Remove book": [ "Eliminar libro" ],
+			"Replace Cover": [ "Reemplazar portada" ],
+			"Remove Upload": [ "Eliminar carga" ],
+			"Details": [ "Detalles" ],
+			"Book Details": [ "Detalles del libro" ],
+			"Caption": [ "Leyenda" ],
+			"Enter a caption…": [ "Introduce una leyenda…" ],
+			"URL (optional link)": [ "URL (enlace opcional)" ],
+			"Save": [ "Guardar" ],
+			"Cancel": [ "Cancelar" ]
+		}
+	}
 }
