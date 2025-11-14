@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @see https://developer.wordpress.org/reference/functions/register_block_type/
  */
 function book_grid_block_init() {
-	register_block_type( __DIR__ . '/build/' );
+	register_block_type( __DIR__ );
 
 	// Register translations for the block.
 	if ( function_exists( 'wp_set_script_translations' ) ) {
