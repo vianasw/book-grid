@@ -1,0 +1,867 @@
+<?xml version="1.0"?><artefact name="Book Grid" slug="book-grid" type="code-package">
+  <file name="readme.txt">
+    <description>This file contains the readme information for the block. It is used to provide information about the block, its usage, and any other relevant details.</description>
+    <content><![CDATA[
+=== Book Grid ===
+Contributors:      w0 block authoring tool
+Tags:              block, books, grid, openlibrary, gallery, responsive
+Stable tag:        0.1.0
+License:           GPL-2.0-or-later
+Requires at least: 6.0
+Requires PHP:      7.2
+Text Domain:       book-grid-block-wp
+Domain Path:       /languages
+
+A WordPress block for displaying a responsive, visually appealing grid of book covers, automatically fetched from OpenLibrary by book title, with customizable captions, columns, and layout settings. Fully translatable, with support for English, Spanish, French, German, Italian, Brazilian Portuguese, Japanese, and Korean.
+
+== Description ==
+
+Book Grid lets you effortlessly showcase book cover galleries as a stylish grid layout. Add books quickly by title—the block fetches cover images from OpenLibrary automatically—and display attractive captions. The block features responsive settings to control the number of columns by device, advanced margin and background controls, and engaging hover effects for interactivity.
+
+All static and interface text is translation-ready, supporting:
+* Spanish (es_ES)
+* French (fr_FR)
+* German (de_DE)
+* Italian (it_IT)
+* Brazilian Portuguese (pt_BR)
+* Japanese (ja)
+* Korean (ko_KR)
+
+== Installation ==
+
+1. Upload the plugin files to the `/wp-content/plugins/book-grid` directory, or install the plugin through the WordPress plugins screen directly.
+2. Activate the plugin through the 'Plugins' screen in WordPress.
+
+== Frequently Asked Questions ==
+
+= How are images fetched from OpenLibrary? =
+The block uses the public OpenLibrary Cover Images API, automatically looking up covers based on the book titles you enter.
+
+= Can I change how many columns show on mobile or tablet? =
+Yes, you can adjust column numbers for desktop, tablet, and mobile views in the block settings.
+
+== Screenshots ==
+
+1. Example of a grid book cover grid with captions.
+2. Block settings for columns, margins, and background color.
+
+== Changelog ==
+
+= 0.1.0 =
+* Initial release
+
+== Arbitrary section ==
+
+Great for book lists, reviews, reading challenges, libraries, and any content requiring book cover displays in a modern, grid gallery format.
+]]></content>
+  </file>
+  <file name="book-grid.php">
+    <description>This file contains the block registration code in the form of a single block plugin. Any other plugin related functionality should be added to this file. All block rendering functionality should go to the `render.php` file.</description>
+    <content><![CDATA[<?php
+/**
+ * Plugin Name:       Book Grid
+ * Description:       A WordPress block for displaying a responsive, visually appealing grid of book covers, automatically fetched from OpenLibrary by book title, with customizable captions, columns, and layout settings.
+ * Version:           0.1.0
+ * License:           GPL-2.0-or-later
+ * Text Domain:       book-grid-block-wp
+ * Domain Path:       /languages
+ *
+ * @package BookGrid
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+/**
+ * Registers the block using the metadata loaded from the `block.json` file.
+ * Behind the scenes, it registers also all assets so they can be enqueued
+ * through the block editor in the corresponding context.
+ *
+ * @see https://developer.wordpress.org/reference/functions/register_block_type/
+ */
+function book_grid_grid_block_init() {
+	register_block_type( __DIR__ . '/build/' );
+
+	// Register translations for the block.
+	if ( function_exists( 'wp_set_script_translations' ) ) {
+		wp_set_script_translations( 'w0-book-grid-editor-script', 'book-grid-block-wp', plugin_dir_path( __FILE__ ) . 'languages' );
+	}
+}
+add_action( 'init', 'book_grid_grid_block_init' );
+]]></content>
+  </file>
+  <file name="block.json">
+    <description>This file contains metadata about the block including its name, title, category, icon, and other properties.</description>
+    <content><![CDATA[
+  {
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "w0/book-grid",
+	"version": "0.1.0",
+	"title": "Book Grid",
+	"category": "media",
+	"icon": "images-alt2",
+	"description": "Display a responsive, customizable grid of book covers fetched from OpenLibrary by title (or uploaded), with overlay captions, flexible layout, and fallback placeholders.",
+	"example": {
+	  "attributes": {
+	    "books": [
+	      { "title": "Pride and Prejudice" },
+	      { "title": "Moby Dick" }
+	    ],
+	    "columnsDesktop": 4,
+	    "columnsTablet": 2,
+	    "columnsMobile": 1,
+	    "itemMargin": 16,
+	    "backgroundColor": "#f7f7f7"
+	  }
+   	},
+	"attributes": {
+	  "books": {
+	    "type": "array",
+	    "default": []
+	  },
+	  "columnsDesktop": {
+	    "type": "number",
+	    "default": 4
+	  },
+	  "columnsTablet": {
+	    "type": "number",
+	    "default": 2
+	  },
+	  "columnsMobile": {
+	    "type": "number",
+	    "default": 1
+	  },
+	  "itemMargin": {
+	    "type": "number",
+	    "default": 16
+	  },
+	  "backgroundColor": {
+	    "type": "string",
+	    "default": "#f7f7f7"
+	  }
+	},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "book-grid-block-wp",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js",
+	"editorLocale": ["es_ES", "fr_FR", "de_DE", "it_IT", "pt_BR", "ja", "ko_KR"]
+  }
+  ]]></content>
+  </file>
+  <file name="index.js">
+    <description>This file registers the block, specifies the edit and save functions, and loads the block's metadata</description>
+    <content><![CDATA[
+  /**
+ * Registers a new block provided a unique name and an object defining its behavior.
+ */
+import { registerBlockType } from '@wordpress/blocks';
+import './style.scss';
+import Edit from './edit';
+import save from './save';
+import metadata from './block.json';
+
+registerBlockType( metadata.name, {
+	edit: Edit,
+	save,
+} );
+	]]></content>
+  </file>
+  <file name="edit.js">
+    <description>This file contains the edit function for the block which is responsible for rendering the block in the editor.</description>
+    <content><![CDATA[import { __ } from '@wordpress/i18n';
+import {
+	useBlockProps,
+	InspectorControls,
+	MediaUpload,
+	MediaUploadCheck,
+	PanelColorSettings,
+} from '@wordpress/block-editor';
+import {
+	PanelBody,
+	RangeControl,
+	Button,
+	Modal,
+	TextControl,
+} from '@wordpress/components';
+import { useState } from '@wordpress/element';
+
+const fetchCoverByTitle = async (title) => {
+	try {
+		const q = encodeURIComponent(title);
+		const res = await fetch(`https://openlibrary.org/search.json?title=${q}&limit=1`);
+		if (!res.ok) return null;
+		const data = await res.json();
+		if (data.docs && data.docs.length && data.docs[0].cover_i) {
+			return `https://covers.openlibrary.org/b/id/${data.docs[0].cover_i}-L.jpg`;
+		}
+	} catch {
+		// ignore
+	}
+	return null;
+};
+
+const EMPTY_BOOK = { title: '', coverUrl: null, uploadedId: null, uploadedUrl: null, caption: '', link: '' };
+
+export default function Edit({ attributes, setAttributes }) {
+	const {
+		books = [],
+		columnsDesktop,
+		columnsTablet,
+		columnsMobile,
+		itemMargin,
+		backgroundColor,
+	} = attributes;
+
+	const [inputValue, setInputValue] = useState('');
+	const [loading, setLoading] = useState(false);
+	const [detailsIdx, setDetailsIdx] = useState(null);
+	const [detailsDraft, setDetailsDraft] = useState({ caption: '', link: '' });
+
+	const handleAddBook = async () => {
+		const title = inputValue.trim();
+		if (!title) return;
+		setLoading(true);
+		const coverUrl = await fetchCoverByTitle(title);
+		setAttributes({
+			books: [
+				...books,
+				{ ...EMPTY_BOOK, title, coverUrl: coverUrl || null },
+			],
+		});
+		setInputValue('');
+		setLoading(false);
+	};
+
+	const handleRemove = (idx) => {
+		setAttributes({ books: books.filter((_, i) => i !== idx) });
+	};
+
+	const handleImageUpload = (idx, media) => {
+		const updates = [...books];
+		updates[idx] = {
+			...updates[idx],
+			uploadedId: media.id,
+			uploadedUrl: media.url,
+			coverUrl: null,
+		};
+		setAttributes({ books: updates });
+	};
+
+	const handleRemoveImage = (idx) => {
+		const updates = [...books];
+		updates[idx] = {
+			...updates[idx],
+			uploadedId: null,
+			uploadedUrl: null,
+		};
+		setAttributes({ books: updates });
+	};
+
+	const openDetails = (idx) => {
+		setDetailsIdx(idx);
+		setDetailsDraft({
+			caption: books[idx]?.caption || '',
+			link: books[idx]?.link || '',
+		});
+	};
+	const closeDetails = () => setDetailsIdx(null);
+	const saveDetails = () => {
+		const updates = [...books];
+		updates[detailsIdx] = {
+			...updates[detailsIdx],
+			caption: detailsDraft.caption.trim(),
+			link: detailsDraft.link.trim(),
+		};
+		setAttributes({ books: updates });
+		closeDetails();
+	};
+
+	const blockProps = useBlockProps({
+		style: {
+			backgroundColor: backgroundColor,
+			padding: 24,
+			borderRadius: 10,
+		},
+		className: 'book-grid-block',
+	});
+
+	return (
+		<>
+			<InspectorControls>
+				<PanelBody title={__( 'Grid Settings', 'book-grid-block-wp' )}>
+					<RangeControl
+						label={__( 'Columns (Desktop)', 'book-grid-block-wp' )}
+						min={1}
+						max={8}
+						value={columnsDesktop}
+						onChange={(v) => setAttributes({ columnsDesktop: v })}
+					/>
+					<RangeControl
+						label={__( 'Columns (Tablet)', 'book-grid-block-wp' )}
+						min={1}
+						max={6}
+						value={columnsTablet}
+						onChange={(v) => setAttributes({ columnsTablet: v })}
+					/>
+					<RangeControl
+						label={__( 'Columns (Mobile)', 'book-grid-block-wp' )}
+						min={1}
+						max={4}
+						value={columnsMobile}
+						onChange={(v) => setAttributes({ columnsMobile: v })}
+					/>
+					<RangeControl
+						label={__( 'Item Margin (px)', 'book-grid-block-wp' )}
+						min={0}
+						max={48}
+						value={itemMargin}
+						onChange={(v) => setAttributes({ itemMargin: v })}
+					/>
+				</PanelBody>
+				<PanelColorSettings
+					title={__( 'Background Color', 'book-grid-block-wp' )}
+					colorSettings={[
+						{
+							value: backgroundColor,
+							onChange: (color) => setAttributes({ backgroundColor: color }),
+							label: __( 'Background Color', 'book-grid-block-wp' ),
+						},
+					]}
+				/>
+			</InspectorControls>
+			<div {...blockProps}>
+				<div className="book-grid__controls aligned-controls">
+					<TextControl
+						label={__( 'Add Book by Title', 'book-grid-block-wp' )}
+						value={inputValue}
+						placeholder={__( 'Enter book title…', 'book-grid-block-wp' )}
+						onChange={setInputValue}
+						disabled={loading}
+						onKeyPress={(e) => {
+							if (e.key === 'Enter') {
+								handleAddBook();
+								e.preventDefault();
+							}
+						}}
+						className="add-book-title-input"
+					/>
+					<Button
+						variant="primary"
+						onClick={handleAddBook}
+						disabled={loading || !inputValue.trim()}
+						style={{ marginLeft: 8, marginBottom: 6 }}
+					>
+						{loading ? __( 'Fetching…', 'book-grid-block-wp' ) : __( 'Add Book', 'book-grid-block-wp' )}
+					</Button>
+				</div>
+				<div
+					className="book-grid"
+					style={{
+						gridGap: `${itemMargin}px`,
+						gridTemplateColumns: `repeat(${columnsDesktop}, 1fr)`
+					}}
+					data-cols-desktop={columnsDesktop}
+					data-cols-tablet={columnsTablet}
+					data-cols-mobile={columnsMobile}
+				>
+					{books.length === 0 && (
+						<p className="book-grid__placeholder">{__( 'No books added. Add book titles above to get started!', 'book-grid-block-wp' )}</p>
+					)}
+					{books.map((book, idx) => (
+						<div className="book-grid__item" key={idx} style={{ margin: itemMargin / 2 }}>
+							<div className="book-grid__item-imgwrap">
+								{book.uploadedUrl ? (
+									<img
+										src={book.uploadedUrl}
+										alt={book.title}
+										className="book-grid__cover"
+										loading="lazy"
+									/>
+								) : book.coverUrl ? (
+									<img
+										src={book.coverUrl}
+										alt={book.title}
+										className="book-grid__cover"
+										loading="lazy"
+									/>
+								) : (
+									<div className="book-grid__cover--missing">
+										{__( 'Not found', 'book-grid-block-wp' )}
+									</div>
+								)}
+							{(book.caption) && (
+								<div className="book-grid__overlay">
+									<span className="book-grid__caption">
+										{book.caption}
+									</span>
+								</div>
+							)}
+							<button
+								type="button"
+								className="book-grid__remove"
+								onClick={() => handleRemove(idx)}
+								title={__( 'Remove book', 'book-grid-block-wp' )}
+								aria-label={__( 'Remove book', 'book-grid-block-wp' )}
+							>
+								<span className="book-grid__remove-x" aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div className="book-grid__upload-wrap">
+							<MediaUploadCheck>
+								<MediaUpload
+									onSelect={(media) => handleImageUpload(idx, media)}
+									allowedTypes={['image']}
+									render={({ open }) => (
+										<Button
+											variant="secondary"
+											className="book-grid__upload-btn"
+											onClick={open}
+											style={{ width: '100%', borderRadius: '0', marginTop: 0 }}
+										>
+											{__( 'Replace Cover', 'book-grid-block-wp' )}
+										</Button>
+									)}
+								/>
+							</MediaUploadCheck>
+							{book.uploadedUrl && (
+								<Button
+									variant="link"
+									className="book-grid__remove-upload-btn"
+									onClick={() => handleRemoveImage(idx)}
+								>
+									{__( 'Remove Upload', 'book-grid-block-wp' )}
+								</Button>
+							)}
+						</div>
+						<Button
+							variant="secondary"
+							className="book-grid__upload-btn"
+							onClick={() => openDetails(idx)}
+						>
+							{__( 'Details', 'book-grid-block-wp' )}
+						</Button>
+					</div>
+				))}
+			</div>
+		</div>
+		{detailsIdx !== null && (
+			<Modal
+				title={__( 'Book Details', 'book-grid-block-wp' )}
+				onRequestClose={closeDetails}
+				shouldCloseOnClickOutside={true}
+			>
+				<TextControl
+					label={__( 'Caption', 'book-grid-block-wp' )}
+					value={detailsDraft.caption}
+					onChange={v => setDetailsDraft({ ...detailsDraft, caption: v })}
+					maxLength={160}
+					placeholder={__( 'Enter a caption…', 'book-grid-block-wp' )}
+				/>
+				<TextControl
+					label={__( 'URL (optional link)', 'book-grid-block-wp' )}
+					value={detailsDraft.link}
+					onChange={v => setDetailsDraft({ ...detailsDraft, link: v })}
+					placeholder="https://"
+				/>
+				<div style={{display:'flex', gap:8, marginTop:16}}>
+					<Button variant="primary" onClick={saveDetails}>{__( 'Save', 'book-grid-block-wp' )}</Button>
+					<Button onClick={closeDetails}>{__( 'Cancel', 'book-grid-block-wp' )}</Button>
+				</div>
+			</Modal>
+		)}
+	</>
+	);
+}
+]]></content>
+  </file>
+  <file name="save.js">
+    <description>This file contains the save function for the block which is responsible for creating the static result of rendering the block on the client to display the saved result on the front end.</description>
+    <content><![CDATA[/**
+ * React hook that is used to mark the block wrapper element.
+ */
+import { useBlockProps } from '@wordpress/block-editor';
+
+export default function save({ attributes }) {
+	const {
+		books = [],
+		columnsDesktop,
+		columnsTablet,
+		columnsMobile,
+		itemMargin,
+		backgroundColor,
+	} = attributes;
+
+	const gridStyle = {
+		gridGap: `${itemMargin}px`,
+		gridTemplateColumns: `repeat(${columnsDesktop}, 1fr)`,
+	};
+	const blockStyle = {
+		backgroundColor: backgroundColor,
+		padding: 24,
+		borderRadius: 10,
+	};
+
+	// Helper function: wrap given children in a <a> if there is a link
+	const wrapWithLink = (link, children) => {
+		if (link) {
+			return (
+				<a
+					href={link}
+					rel="noopener noreferrer"
+					target="_blank"
+					className="book-grid__item-link"
+				>
+					{children}
+				</a>
+			);
+		}
+		return children;
+	};
+
+	return (
+		<div {...useBlockProps.save({ style: blockStyle })}>
+			<div
+				className="book-grid"
+				style={gridStyle}
+				data-cols-desktop={columnsDesktop}
+				data-cols-tablet={columnsTablet}
+				data-cols-mobile={columnsMobile}
+			>
+				{books && books.map((book, i) => {
+					const imgEl = book.uploadedUrl ? (
+						<img
+							src={book.uploadedUrl}
+							alt={book.title}
+							className="book-grid__cover"
+							loading="lazy"
+						/>
+					) : book.coverUrl ? (
+						<img
+							src={book.coverUrl}
+							alt={book.title}
+							className="book-grid__cover"
+							loading="lazy"
+						/>
+					) : (
+						<div className="book-grid__cover--missing">
+							Not found
+						</div>
+					);
+					const overlayEl = (book.caption ? (
+						<div className="book-grid__overlay">
+							<span className="book-grid__caption">
+								{book.caption}
+							</span>
+						</div>
+					) : null);
+					const imageWrap = (
+						<div className="book-grid__item-imgwrap">
+							{imgEl}
+							{overlayEl}
+						</div>
+					);
+					return (
+						<div className="book-grid__item" key={i} style={{ margin: itemMargin / 2 }}>
+							{wrapWithLink(book.link, imageWrap)}
+						</div>
+					);
+				})}
+			</div>
+		</div>
+	);
+}
+]]></content>
+  </file>
+  <file name="style.scss">
+    <description>This file contains styles for the block in the front end.</description>
+    <content><![CDATA[.book-grid-block {
+	box-sizing: border-box;
+	width: 100%;
+	max-width: 100%;
+}
+
+.book-grid {
+	display: grid;
+	width: 100%;
+	box-sizing: border-box;
+	transition: all 0.24s;
+}
+
+.book-grid__item {
+	position: relative;
+	background: transparent;
+	border-radius: 8px;
+	overflow: hidden;
+	box-shadow: 0 1px 6px 0 rgba(32, 32, 32, 0.08);
+	will-change: transform;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	justify-content: flex-end;
+}
+
+.book-grid__item-imgwrap {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 2/3;
+	display: flex;
+	align-items: stretch;
+	justify-content: center;
+	background: #e6e6e6;
+	overflow: hidden;
+}
+
+.book-grid__cover {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	transition: transform 0.24s cubic-bezier(0.4,0,0.2,1), opacity 0.24s cubic-bezier(0.4,0,0.2,1);
+}
+
+.book-grid__item-imgwrap:hover .book-grid__cover,
+.book-grid__item-imgwrap:focus .book-grid__cover {
+	transform: scale(1.07);
+	opacity: 0.85;
+}
+
+.book-grid__cover--missing {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	background: #ddd;
+	color: #656565;
+	font-size: 1.1em;
+	padding: 12px;
+	text-align: center;
+}
+
+.book-grid__overlay {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background: linear-gradient(0deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.16) 90%);
+	padding: 0.5em 0.9em;
+	display: flex;
+	align-items: flex-end;
+	justify-content: flex-start;
+	transition: opacity 0.24s;
+	opacity: 1;
+	min-height: 2.5em;
+	border-radius: 0 0 8px 8px;
+}
+
+.book-grid__caption {
+	color: #fff;
+	font-size: 1.13em;
+	letter-spacing: 0.01em;
+	line-height: 1.3;
+	word-break: break-word;
+	font-weight: 700;
+	text-shadow: 0 2px 4px rgba(0,0,0,0.32);
+}
+
+@media (max-width: 880px) {
+	.book-grid {
+		grid-template-columns: repeat(var(--cols-tablet, 2), 1fr) !important;
+	}
+}
+@media (max-width: 640px) {
+	.book-grid {
+		grid-template-columns: repeat(var(--cols-mobile, 1), 1fr) !important;
+	}
+}
+
+.book-grid__item-imgwrap .book-grid__remove {
+	position: absolute;
+	top: 5px;
+	right: 7px;
+	z-index: 5;
+	background: rgba(255,255,255,0.94);
+	color: #222;
+	border-radius: 50%;
+	box-shadow: 0 1px 6px 0 rgba(19,16,16,0.2);
+	padding: 0;
+	cursor: pointer;
+	border: none;
+	width: 28px;
+	height: 28px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.30em;
+	transition: background 0.18s, color 0.18s;
+}
+
+.book-grid__item-imgwrap .book-grid__remove-x {
+	display: block;
+	font-weight: 800;
+	font-size: 1.12em;
+	line-height: 1;
+	pointer-events: none;
+}
+
+.book-grid__item-imgwrap .book-grid__remove:hover,
+.book-grid__item-imgwrap .book-grid__remove:focus {
+	background: #e66a6a;
+	color: #fff;
+}
+
+.book-grid__controls, .aligned-controls {
+	display: flex;
+	gap: 10px;
+	margin-bottom: 1em;
+	align-items: flex-end;
+}
+
+.add-book-title-input {
+	flex: 1 1 220px;
+	min-width: 0;
+	margin-right: 0;
+}
+
+.book-grid__placeholder {
+	color: #888;
+	margin-top: 2.5em;
+	text-align: center;
+	font-style: italic;
+}
+
+.book-grid__caption-input {
+	background: rgba(0,0,0,0.04);
+	border: none;
+	width: 100%;
+	color: #fff;
+	font-size: 1.08em;
+	padding: 0 0.1em;
+}
+
+.book-grid__upload-wrap {
+	margin-top: 14px;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5em;
+	align-items: stretch;
+}
+
+.book-grid__upload-btn {
+	width: 100%;
+	box-sizing: border-box;
+	margin-top: 6px;
+	border-radius: 0;
+}
+
+.book-grid__remove-upload-btn {
+	padding-left: 0;
+}
+
+.book-grid__details-btn {
+	width: 100%;
+    box-sizing: border-box;
+	margin-top: 6px;
+	border: 1.5px solid #5a7491;
+	border-radius: 5px;
+	background: #faffff;
+	color: #295f92;
+	transition: border 0.12s, color 0.12s;
+}
+
+.book-grid__details-btn:hover,
+.book-grid__details-btn:focus {
+	border-color: #21759b;
+	background: #e9f3fb;
+	color: #17446d;
+}
+]]></content>
+  </file>
+  <file name="editor.scss">
+    <description>This file contains styles for the block in the editor.</description>
+    <content><![CDATA[.book-grid-block {
+	box-shadow: 0 0 0 1px #3796df44;
+}
+.book-grid__item-imgwrap {
+	outline: 1.5px solid #3786ce44;
+}
+.book-grid__item-imgwrap:focus-within,
+.book-grid__item-imgwrap:hover {
+	outline: 2px solid #21759b;
+}
+.book-grid__remove {
+	opacity: 0.96;
+	border: none;
+	outline: none;
+}
+.book-grid__remove-x {
+	opacity: 0.96;
+	pointer-events: none;
+}
+]]></content>
+  </file>
+  <file name="view.js">
+    <description>This file contains the view function for the block which is responsible for rendering interactive behaviors of the block on the front end.</description>
+    <content><![CDATA[
+/**
+ * Add responsive and interactive behaviors using JS on the front-end.
+ */
+document.addEventListener('DOMContentLoaded', function() {
+	const grids = document.querySelectorAll('.book-grid');
+	grids.forEach(grid => {
+		// Responsive column switching
+		const updateCols = () => {
+			const w = window.innerWidth;
+			const desktop = grid.getAttribute('data-cols-desktop') || 4;
+			const tablet = grid.getAttribute('data-cols-tablet') || 2;
+			const mobile = grid.getAttribute('data-cols-mobile') || 1;
+			if (w <= 640) {
+				grid.style.setProperty('grid-template-columns', `repeat(${mobile}, 1fr)`);
+				grid.style.setProperty('--cols-mobile', mobile);
+			} else if (w <= 880) {
+				grid.style.setProperty('grid-template-columns', `repeat(${tablet}, 1fr)`);
+				grid.style.setProperty('--cols-tablet', tablet);
+			} else {
+				grid.style.setProperty('grid-template-columns', `repeat(${desktop}, 1fr)`);
+			}
+		};
+		updateCols();
+		window.addEventListener('resize', updateCols, { passive: true });
+	});
+});
+	]]></content>
+  </file>
+  <file name="render.php">
+    <description>This file contains the render callback function for the block, which is responsible for rendering the block content on the front end. A render function should exist only if the block is dynamic.</description>
+    <content><![CDATA[]
+]]></content>
+  </file>
+  <file name="package.json">
+    <description>The AI assistant should only edit 'user_provided_block_name_slug', 'description' and resolve 'isDynamicVariant' in this file and ALWAYS INCLUDE IT. This file includes the necessary scripts for building, formatting, and linting the block code. Dependencies are managed at the workspace level via pnpm.</description>
+    <content><![CDATA[
+  {
+	"name": "book-grid",
+	"version": "0.1.0",
+	"description": "Display a responsive, customizable grid of book covers fetched from OpenLibrary by title, with overlay captions and flexible layout settings.",
+	"author": "w0 block authoring tool",
+	"license": "GPL-2.0-or-later",
+	"main": "build/index.js",
+	"scripts": {
+		"build": "wp-scripts build --webpack-copy-php",
+		"format": "wp-scripts format",
+		"lint:css": "wp-scripts lint-style",
+		"lint:js": "wp-scripts lint-js",
+		"packages-update": "wp-scripts packages-update",
+		"plugin-zip": "wp-scripts plugin-zip",
+		"start": "wp-scripts start --blocks-manifest"
+	}
+}
+]]></content>
+  </file>
+</artefact>

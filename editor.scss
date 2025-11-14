@@ -1,0 +1,19 @@
+.book-grid-block {
+	box-shadow: 0 0 0 1px #3796df44;
+}
+.book-grid__item-imgwrap {
+	outline: 1.5px solid #3786ce44;
+}
+.book-grid__item-imgwrap:focus-within,
+.book-grid__item-imgwrap:hover {
+	outline: 2px solid #21759b;
+}
+.book-grid__remove {
+	opacity: 0.96;
+	border: none;
+	outline: none;
+}
+.book-grid__remove-x {
+	opacity: 0.96;
+	pointer-events: none;
+}
