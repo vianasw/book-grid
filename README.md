@@ -173,3 +173,16 @@ This project is licensed under the GPL-2.0-or-later License - see the [LICENSE](
 
 - [WordPress.org Plugin Page](#) (Coming Soon)
 - [GitHub Repository](https://github.com/vianasw/book-grid)
+
+## Source Code & Build
+
+The distributed `build/` assets are compiled from the human-readable source in [`src/`](./src). Build scripts rely on `@wordpress/scripts`. Install dependencies with `npm install` and run `npm run build` to regenerate the production assets.
+
+## External Services
+
+This plugin calls Open Library to fetch book covers automatically:
+
+- **Service**: Open Library Search and Covers APIs (`openlibrary.org`, `covers.openlibrary.org`)
+- **Data sent**: The book title entered in the block is sent as a search query when you add or update a book. Cover image requests include the returned cover ID. No other data is transmitted.
+- **Purpose**: Retrieve book cover images so the grid can display artwork without manual uploads.
+- **Policies**: [Terms of Service](https://openlibrary.org/terms) | [Privacy Policy](https://openlibrary.org/privacy)

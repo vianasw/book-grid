@@ -19,6 +19,13 @@ Book Grid lets you effortlessly showcase book cover galleries as a stylish grid 
 * Spanish (es_ES) - Included
 * Translation Ready - All text strings are internationalized. Community translations are welcome!
 
+== External Services ==
+
+* What: Open Library search and cover image APIs (`openlibrary.org`, `covers.openlibrary.org`)
+* Use: Look up book cover IDs and download cover images so the block can render book art automatically.
+* Data sent: The book title you enter in the block is sent as a search query when you add or update a book. Cover image requests include the cover ID returned by Open Library. No other data is transmitted.
+* Terms and privacy: [Terms of Service](https://openlibrary.org/terms) — [Privacy Policy](https://openlibrary.org/privacy)
+
 == Installation ==
 
 1. Upload the plugin files to the `/wp-content/plugins/book-grid` directory, or install the plugin through the WordPress plugins screen directly.
@@ -41,6 +48,10 @@ Yes, you can adjust column numbers for desktop, tablet, and mobile views in the 
 
 = 0.1.0 =
 * Initial release
+
+== Source Code and Build ==
+
+This plugin ships compiled JS/CSS in the `build/` directory. The human-readable source code is publicly available in `src/` at https://github.com/vianasw/book-grid. To regenerate the compiled assets, install Node.js dependencies with `npm install` and run `npm run build` (uses `@wordpress/scripts`).
 
 == Developer Notes ==
 
