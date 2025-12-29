@@ -4,7 +4,7 @@ Tags:              block, books, grid, openlibrary, gallery
 Stable tag:        0.1.0
 License:           GPL-2.0-or-later
 Requires at least: 6.0
-Tested up to:      6.8
+Tested up to:      6.9
 Requires PHP:      7.2
 Text Domain:       book-grid
 Domain Path:       /languages
